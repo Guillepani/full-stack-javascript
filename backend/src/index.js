@@ -1,5 +1,6 @@
 require('dotenv').config()
 
+const cors = require('cors')
 const connectDB = require('./config/db')
 const userRoutes = require('./api/routes/userRoutes')
 const eventRoutes = require('./api/routes/eventRoutes')
@@ -7,6 +8,11 @@ const express = require('express')
 connectDB()
 
 const app = express()
+app.use(
+  cors({
+    origin: '*'
+  })
+)
 app.use(express.json())
 
 app.get('/', (req, res) => {

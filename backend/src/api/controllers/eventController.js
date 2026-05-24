@@ -50,8 +50,52 @@ const joinEvent = async (req, res) => {
   }
 }
 
+const getEventById = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const event = await Event.findById(id).populate('attendees', '-password')
+
+    return res.status(200).json(event)
+  } catch (error) {
+    return res.status(500).json('Error obteniendo evento')
+  }
+}
+
+const updateEvent = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const updatedEvent = await Event.findByIdAndUpdate(id, req.body, {
+      new: true
+    })
+
+    return res.status(200).json({
+      message: 'Evento actualizado correctamente',
+      event: updatedEvent
+    })
+  } catch (error) {
+    return res.status(500).json('Error actualizando evento')
+  }
+}
+
+const deleteEvent = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    await Event.findByIdAndDelete(id)
+
+    return res.status(200).json('Evento eliminado correctamente')
+  } catch (error) {
+    return res.status(500).json('Error eliminando evento')
+  }
+}
+
 module.exports = {
   getEvents,
   createEvent,
-  joinEvent
+  joinEvent,
+  getEventById,
+  updateEvent,
+  deleteEvent
 }

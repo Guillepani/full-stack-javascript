@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const connectDB = require('./config/db')
 const userRoutes = require('./api/routes/userRoutes')
+const eventRoutes = require('./api/routes/eventRoutes')
 const express = require('express')
 connectDB()
 
@@ -13,6 +14,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/events', eventRoutes)
 
 app.listen(3000, () => {
   console.log('Servidor levantado en http://localhost:3000')

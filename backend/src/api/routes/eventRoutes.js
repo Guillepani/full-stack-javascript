@@ -1,5 +1,7 @@
 const express = require('express')
 
+const auth = require('../../middlewares/auth')
+
 const {
   getEvents,
   createEvent,
@@ -9,7 +11,7 @@ const {
 const eventRoutes = express.Router()
 
 eventRoutes.get('/', getEvents)
-eventRoutes.post('/', createEvent)
+eventRoutes.post('/', auth, createEvent)
 eventRoutes.put('/join', joinEvent)
 
 module.exports = eventRoutes

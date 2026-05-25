@@ -1,4 +1,7 @@
 import './styles/global.css'
+import './styles/navbar.css'
+import './styles/forms.css'
+import './styles/events.css'
 
 import { Navbar } from './components/Navbar'
 

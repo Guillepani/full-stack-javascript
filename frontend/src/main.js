@@ -4,6 +4,7 @@ import './styles/forms.css'
 import './styles/events.css'
 
 import { Navbar } from './components/Navbar'
+import { logoutListener } from './components/LogoutButton'
 
 import {
   CreateEventForm,
@@ -16,14 +17,10 @@ import { LoginForm, loginFormListeners } from './components/LoginForm'
 
 import { EventsList, renderEvents } from './components/EventsList'
 
-import { LogoutButton, logoutListener } from './components/LogoutButton'
-
 const token = localStorage.getItem('token')
 
 document.querySelector('#app').innerHTML = `
-  ${Navbar()}
-
-  ${token ? LogoutButton() : ''}
+  ${Navbar(token)}
 
   <main class="main-content">
 

@@ -27,6 +27,8 @@ export const CreateEventForm = () => {
 export const createEventListeners = () => {
   const form = document.querySelector('#event-form')
 
+  if (!form) return
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
 

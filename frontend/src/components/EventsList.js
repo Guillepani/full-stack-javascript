@@ -1,4 +1,5 @@
 import { getEvents } from '../services/api'
+import { EventCard } from './EventCard'
 
 export const EventsList = () => {
   return `
@@ -15,17 +16,5 @@ export const renderEvents = async () => {
 
   const events = await getEvents()
 
-  container.innerHTML = events
-    .map(
-      (event) => `
-        <article>
-          <h3>${event.title}</h3>
-
-          <p>${event.location}</p>
-
-          <p>${event.description}</p>
-        </article>
-      `
-    )
-    .join('')
+  container.innerHTML = events.map((event) => EventCard(event)).join('')
 }

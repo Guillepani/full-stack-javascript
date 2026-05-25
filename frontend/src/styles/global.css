@@ -62,15 +62,41 @@ form {
 input,
 textarea,
 button {
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+
+  font-size: 16px;
+}
+
+input,
+textarea {
+  background-color: #111827;
+  color: white;
+  border: 1px solid #374151;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
 }
 
 button {
   background-color: #2563eb;
   color: white;
   font-weight: bold;
+
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #1d4ed8;
 }
 
 #events-container {
@@ -96,6 +122,42 @@ article {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+}
+
+.event-card {
+  background-color: #111827;
+  border: 1px solid #374151;
+  border-radius: 16px;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  transition: 0.3s;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  border-color: #2563eb;
+}
+
+.event-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.event-card-top span {
+  background-color: #2563eb;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+.event-card small {
+  color: #9ca3af;
 }
 
 @media (max-width: 768px) {

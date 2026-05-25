@@ -1,5 +1,7 @@
 import './styles/global.css'
 
+import { Navbar } from './components/Navbar'
+
 import {
   CreateEventForm,
   createEventListeners
@@ -16,23 +18,28 @@ import { LogoutButton, logoutListener } from './components/LogoutButton'
 const token = localStorage.getItem('token')
 
 document.querySelector('#app').innerHTML = `
-  <h1>MeetMoto</h1>
+  ${Navbar()}
 
-${token ? LogoutButton() : ''}
+  ${token ? LogoutButton() : ''}
 
-  <section>
-    <h2>Registro</h2>
-    ${RegisterForm()}
-  </section>
+  <main class="main-content">
 
-  <section>
-    <h2>Login</h2>
-    ${LoginForm()}
-  </section>
+  <div class="auth-container">
+    <section>
+      <h2>Registro</h2>
+      ${RegisterForm()}
+    </section>
+
+    <section>
+      <h2>Login</h2>
+      ${LoginForm()}
+    </section>
+  </div>
 
   ${token ? CreateEventForm() : ''}
 
   ${EventsList()}
+</main>
 `
 
 registerFormListeners()

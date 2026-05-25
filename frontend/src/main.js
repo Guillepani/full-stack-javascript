@@ -11,8 +11,14 @@ import { LoginForm, loginFormListeners } from './components/LoginForm'
 
 import { EventsList, renderEvents } from './components/EventsList'
 
+import { LogoutButton, logoutListener } from './components/LogoutButton'
+
+const token = localStorage.getItem('token')
+
 document.querySelector('#app').innerHTML = `
   <h1>MeetMoto</h1>
+
+${token ? LogoutButton() : ''}
 
   <section>
     <h2>Registro</h2>
@@ -24,7 +30,7 @@ document.querySelector('#app').innerHTML = `
     ${LoginForm()}
   </section>
 
-  ${CreateEventForm()}
+  ${token ? CreateEventForm() : ''}
 
   ${EventsList()}
 `
@@ -33,3 +39,4 @@ registerFormListeners()
 loginFormListeners()
 createEventListeners()
 renderEvents()
+logoutListener()

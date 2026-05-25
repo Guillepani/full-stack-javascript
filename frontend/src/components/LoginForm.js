@@ -32,5 +32,7 @@ export const loginFormListeners = () => {
     }
 
     console.log(response)
+
+    location.reload()
   })
 }

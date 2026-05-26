@@ -18,6 +18,7 @@ import { LoginForm, loginFormListeners } from './components/LoginForm'
 import { EventsList, renderEvents } from './components/EventsList'
 
 const token = localStorage.getItem('token')
+const user = JSON.parse(localStorage.getItem('user'))
 
 document.querySelector('#app').innerHTML = `
   ${Navbar(token)}

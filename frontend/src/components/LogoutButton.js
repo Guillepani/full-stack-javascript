@@ -13,7 +13,8 @@ export const logoutListener = () => {
 
   button.addEventListener('click', () => {
     localStorage.removeItem('token')
-
+    localStorage.removeItem('user')
+    
     location.reload()
   })
 }

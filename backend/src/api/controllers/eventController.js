@@ -2,7 +2,9 @@ const Event = require('../models/Event')
 
 const getEvents = async (req, res) => {
   try {
-    const events = await Event.find().populate('attendees', '-password')
+    const events = await Event.find()
+      .populate('attendees', '-password')
+      .populate('creator', 'name email')
 
     return res.status(200).json(events)
   } catch (error) {
@@ -12,7 +14,10 @@ const getEvents = async (req, res) => {
 
 const createEvent = async (req, res) => {
   try {
-    const newEvent = new Event(req.body)
+    const newEvent = new Event({
+      ...req.body,
+      creator: req.user.id
+    })
 
     const savedEvent = await newEvent.save()
 
@@ -29,10 +34,14 @@ const joinEvent = async (req, res) => {
   try {
     const { eventId, userId } = req.body
 
+    const event = await Event.findById(eventId)
+
+    const alreadyJoined = event.attendees.includes(userId)
+
     const updatedEvent = await Event.findByIdAndUpdate(
       eventId,
       {
-        $addToSet: {
+        [alreadyJoined ? '$pull' : '$addToSet']: {
           attendees: userId
         }
       },
@@ -42,7 +51,9 @@ const joinEvent = async (req, res) => {
     ).populate('attendees', '-password')
 
     return res.status(200).json({
-      message: 'Asistencia confirmada',
+      message: alreadyJoined
+        ? 'Has salido del evento'
+        : 'Asistencia confirmada',
       event: updatedEvent
     })
   } catch (error) {
@@ -54,7 +65,9 @@ const getEventById = async (req, res) => {
   try {
     const { id } = req.params
 
-    const event = await Event.findById(id).populate('attendees', '-password')
+    const event = await Event.findById(id)
+      .populate('attendees', '-password')
+      .populate('creator', 'name email')
 
     return res.status(200).json(event)
   } catch (error) {
@@ -65,6 +78,18 @@ const getEventById = async (req, res) => {
 const updateEvent = async (req, res) => {
   try {
     const { id } = req.params
+
+    const event = await Event.findById(id)
+
+    if (!event) {
+      return res.status(404).json('Evento no encontrado')
+    }
+
+    if (event.creator.toString() !== req.user.id) {
+      return res
+        .status(403)
+        .json('No puedes editar este evento')
+    }
 
     const updatedEvent = await Event.findByIdAndUpdate(id, req.body, {
       new: true
@@ -82,6 +107,18 @@ const updateEvent = async (req, res) => {
 const deleteEvent = async (req, res) => {
   try {
     const { id } = req.params
+
+    const event = await Event.findById(id)
+
+    if (!event) {
+      return res.status(404).json('Evento no encontrado')
+    }
+
+    if (event.creator.toString() !== req.user.id) {
+      return res
+        .status(403)
+        .json('No puedes eliminar este evento')
+    }
 
     await Event.findByIdAndDelete(id)
 

@@ -44,3 +44,15 @@ button {
 button:hover {
   background-color: #1d4ed8;
 }
+
+.form-errors {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-errors p {
+  color: #f87171;
+  font-size: 14px;
+  line-height: 1.4;
+}

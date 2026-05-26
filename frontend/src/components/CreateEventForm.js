@@ -1,16 +1,34 @@
+import { createEvent } from '../services/api'
+
 import { renderEvents } from './EventsList'
 
 export const CreateEventForm = () => {
   return `
-    <section>
-      <h2>Crear evento</h2>
+    <section class="create-event-section">
+      <h2>
+        Crear evento
+      </h2>
 
       <form id="event-form">
-        <input type="text" name="title" placeholder="Título" required>
+        <input
+          type="text"
+          name="title"
+          placeholder="Título"
+          required
+        >
 
-        <input type="date" name="date" required>
+        <input
+          type="date"
+          name="date"
+          required
+        >
 
-        <input type="text" name="location" placeholder="Ubicación" required>
+        <input
+          type="text"
+          name="location"
+          placeholder="Ubicación"
+          required
+        >
 
         <textarea
           name="description"
@@ -18,7 +36,9 @@ export const CreateEventForm = () => {
           required
         ></textarea>
 
-        <button>Crear evento</button>
+        <button>
+          Crear evento
+        </button>
       </form>
     </section>
   `
@@ -32,8 +52,6 @@ export const createEventListeners = () => {
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
 
-    const token = localStorage.getItem('token')
-
     const formData = new FormData(form)
 
     const eventData = {
@@ -43,21 +61,9 @@ export const createEventListeners = () => {
       description: formData.get('description')
     }
 
-    const response = await fetch(
-      'https://automatic-space-guide-97j76rxvj4jwhprrr-3000.app.github.dev/api/v1/events',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(eventData)
-      }
-    )
+    const response = await createEvent(eventData)
 
-    const data = await response.json()
-
-    console.log(data)
+    console.log(response)
 
     renderEvents()
 

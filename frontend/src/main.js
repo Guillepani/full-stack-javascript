@@ -2,49 +2,20 @@ import './styles/global.css'
 import './styles/navbar.css'
 import './styles/forms.css'
 import './styles/events.css'
+import './styles/auth-view.css'
+import './styles/app-view.css'
 
-import { Navbar } from './components/Navbar'
-import { logoutListener } from './components/LogoutButton'
-
-import {
-  CreateEventForm,
-  createEventListeners
-} from './components/CreateEventForm'
-
-import { RegisterForm, registerFormListeners } from './components/RegisterForm'
-
-import { LoginForm, loginFormListeners } from './components/LoginForm'
-
-import { EventsList, renderEvents } from './components/EventsList'
+import { AuthView, authViewListeners } from './views/AuthView'
+import { AppView, appViewListeners } from './views/AppView'
 
 const token = localStorage.getItem('token')
-const user = JSON.parse(localStorage.getItem('user'))
 
 document.querySelector('#app').innerHTML = `
-  ${Navbar(token)}
-
-  <main class="main-content">
-
-  <div class="auth-container">
-    <section>
-      <h2>Registro</h2>
-      ${RegisterForm()}
-    </section>
-
-    <section>
-      <h2>Login</h2>
-      ${LoginForm()}
-    </section>
-  </div>
-
-  ${token ? CreateEventForm() : ''}
-
-  ${EventsList()}
-</main>
+  ${!token ? AuthView() : AppView(token)}
 `
 
-registerFormListeners()
-loginFormListeners()
-createEventListeners()
-renderEvents()
-logoutListener()
+if (!token) {
+  authViewListeners()
+} else {
+  appViewListeners()
+}

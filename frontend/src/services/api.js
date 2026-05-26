@@ -1,5 +1,14 @@
 const API_URL =
-  'https://automatic-space-guide-97j76rxvj4jwhprrr-3000.app.github.dev/api/v1'
+  'https://super-engine-pjpj746vpw642r4qr-3000.app.github.dev/api/v1'
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token')
+
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`
+  }
+}
 
 export const registerUser = async (userData) => {
   const response = await fetch(`${API_URL}/users/register`, {
@@ -27,6 +36,48 @@ export const loginUser = async (userData) => {
 
 export const getEvents = async () => {
   const response = await fetch(`${API_URL}/events`)
+
+  return response.json()
+}
+
+export const joinEvent = async (eventId, userId) => {
+  const response = await fetch(`${API_URL}/events/join`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({
+      eventId,
+      userId
+    })
+  })
+
+  return response.json()
+}
+
+export const deleteEvent = async (eventId) => {
+  const response = await fetch(`${API_URL}/events/${eventId}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders()
+  })
+
+  return response.json()
+}
+
+export const updateEvent = async (eventId, eventData) => {
+  const response = await fetch(`${API_URL}/events/${eventId}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(eventData)
+  })
+
+  return response.json()
+}
+
+export const createEvent = async (eventData) => {
+  const response = await fetch(`${API_URL}/events`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(eventData)
+  })
 
   return response.json()
 }

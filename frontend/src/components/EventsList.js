@@ -1,4 +1,4 @@
-import { getEvents, joinEvent, deleteEvent } from '../services/api'
+import { getEvents, joinEvent, deleteEvent, updateEvent } from '../services/api'
 
 import { EventCard } from './EventCard'
 
@@ -35,6 +35,61 @@ export const EventsList = () => {
         </h2>
 
         <div id="past-events-container"></div>
+      </div>
+
+      <div
+        id="edit-modal"
+        class="edit-modal hidden"
+      >
+        <div class="edit-modal-content">
+          <h2>
+            Editar evento
+          </h2>
+
+          <form id="edit-event-form">
+            <input
+              type="text"
+              id="edit-title"
+              required
+            >
+
+            <input
+              type="date"
+              id="edit-date"
+              required
+            >
+
+            <input
+              type="time"
+              id="edit-time"
+              required
+            >
+
+            <input
+              type="text"
+              id="edit-location"
+              required
+            >
+
+            <textarea
+              id="edit-description"
+              required
+            ></textarea>
+
+            <div class="edit-modal-actions">
+              <button
+                type="button"
+                id="close-edit-modal"
+              >
+                Cancelar
+              </button>
+
+              <button type="submit">
+                Guardar cambios
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
   `
@@ -145,5 +200,58 @@ const addEventCardListeners = () => {
 
       renderEvents()
     })
+  })
+
+  const modal = document.querySelector('#edit-modal')
+
+  const form = document.querySelector('#edit-event-form')
+
+  const closeButton = document.querySelector('#close-edit-modal')
+
+  const editButtons = document.querySelectorAll('.edit-btn')
+
+  let currentEventId = null
+
+  editButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      currentEventId = button.dataset.eventId
+
+      document.querySelector('#edit-title').value = button.dataset.title
+
+      document.querySelector('#edit-location').value = button.dataset.location
+
+      document.querySelector('#edit-description').value =
+        button.dataset.description
+
+      document.querySelector('#edit-date').value = button.dataset.date
+
+      document.querySelector('#edit-time').value = button.dataset.time
+
+      modal.classList.remove('hidden')
+    })
+  })
+
+  closeButton.addEventListener('click', () => {
+    modal.classList.add('hidden')
+  })
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    await updateEvent(currentEventId, {
+      title: document.querySelector('#edit-title').value,
+
+      date: document.querySelector('#edit-date').value,
+
+      time: document.querySelector('#edit-time').value,
+
+      location: document.querySelector('#edit-location').value,
+
+      description: document.querySelector('#edit-description').value
+    })
+
+    modal.classList.add('hidden')
+
+    renderEvents()
   })
 }

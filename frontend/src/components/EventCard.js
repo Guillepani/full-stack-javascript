@@ -73,6 +73,11 @@ export const EventCard = (event) => {
               <button
                 class="edit-btn"
                 data-event-id="${event._id}"
+                data-title="${event.title}"
+                data-location="${event.location}"
+                data-description="${event.description}"
+                data-date="${event.date.split('T')[0]}"
+                data-time="${event.time}"
               >
                 Editar
               </button>

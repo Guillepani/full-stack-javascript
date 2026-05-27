@@ -59,3 +59,68 @@
 .delete-btn {
   background-color: #dc2626;
 }
+
+.event-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.event-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.edit-modal {
+  position: fixed;
+  inset: 0;
+
+  background-color: rgba(0, 0, 0, 0.7);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+
+  padding: 20px;
+}
+
+.edit-modal-content {
+  width: 100%;
+  max-width: 500px;
+
+  background-color: #111827;
+
+  border: 1px solid #374151;
+
+  border-radius: 20px;
+
+  padding: 30px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.edit-modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-modal-content input,
+.edit-modal-content textarea {
+  width: 100%;
+}
+
+.edit-modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.hidden {
+  display: none;
+}

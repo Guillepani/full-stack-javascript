@@ -8,6 +8,8 @@ const getEvents = async (req, res) => {
 
     return res.status(200).json(events)
   } catch (error) {
+    console.dir(error, { depth: null })
+
     return res.status(500).json({
       message: 'Error obteniendo eventos'
     })
@@ -55,6 +57,8 @@ const createEvent = async (req, res) => {
       event: savedEvent
     })
   } catch (error) {
+    console.dir(error, { depth: null })
+
     return res.status(500).json({
       message: 'Error creando evento'
     })
@@ -96,6 +100,8 @@ const joinEvent = async (req, res) => {
       event: updatedEvent
     })
   } catch (error) {
+    console.dir(error, { depth: null })
+
     return res.status(500).json({
       message: 'Error al unirse al evento'
     })
@@ -118,6 +124,8 @@ const getEventById = async (req, res) => {
 
     return res.status(200).json(event)
   } catch (error) {
+    console.dir(error, { depth: null })
+
     return res.status(500).json({
       message: 'Error obteniendo evento'
     })
@@ -151,6 +159,8 @@ const updateEvent = async (req, res) => {
       event: updatedEvent
     })
   } catch (error) {
+    console.dir(error, { depth: null })
+
     return res.status(500).json({
       message: 'Error actualizando evento'
     })
@@ -181,6 +191,8 @@ const deleteEvent = async (req, res) => {
       message: 'Evento eliminado correctamente'
     })
   } catch (error) {
+    console.dir(error, { depth: null })
+
     return res.status(500).json({
       message: 'Error eliminando evento'
     })

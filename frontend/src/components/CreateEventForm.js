@@ -45,6 +45,13 @@ export const CreateEventForm = () => {
           required
         ></textarea>
 
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          required
+        >
+
         <div
           id="event-form-error"
           class="form-errors"
@@ -73,6 +80,7 @@ export const createEventListeners = () => {
     const formData = new FormData(form)
 
     const selectedDate = formData.get('date')
+
     const selectedTime = formData.get('time')
 
     const eventDate = new Date(`${selectedDate}T${selectedTime}`)
@@ -89,17 +97,11 @@ export const createEventListeners = () => {
       return
     }
 
-    const eventData = {
-      title: formData.get('title'),
-      date: selectedDate,
-      time: selectedTime,
-      location: formData.get('location'),
-      description: formData.get('description')
+    const response = await createEvent(formData)
+
+    if (response.message) {
+      console.log(response.message)
     }
-
-    const response = await createEvent(eventData)
-
-    console.log(response)
 
     renderEvents()
 

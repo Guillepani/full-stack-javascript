@@ -9,6 +9,12 @@ export const EventCard = (event) => {
 
   return `
     <article class="event-card">
+      <img
+        class="event-image"
+        src="${event.image}"
+        alt="${event.title}"
+      >
+
       <div class="event-card-top">
         <div>
           <h3>

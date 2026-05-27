@@ -73,10 +73,14 @@ export const updateEvent = async (eventId, eventData) => {
 }
 
 export const createEvent = async (eventData) => {
+  const token = localStorage.getItem('token')
+
   const response = await fetch(`${API_URL}/events`, {
     method: 'POST',
-    headers: getAuthHeaders(),
-    body: JSON.stringify(eventData)
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: eventData
   })
 
   return response.json()

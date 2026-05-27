@@ -24,6 +24,12 @@ const createEvent = async (req, res) => {
       })
     }
 
+    if (!req.file) {
+      return res.status(400).json({
+        message: 'La imagen del evento es obligatoria'
+      })
+    }
+
     const eventDate = new Date(`${date}T${time}`)
 
     if (eventDate <= new Date()) {
@@ -38,6 +44,7 @@ const createEvent = async (req, res) => {
       time,
       location,
       description,
+      image: req.file.path,
       creator: req.user.id
     })
 

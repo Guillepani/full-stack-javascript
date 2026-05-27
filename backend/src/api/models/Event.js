@@ -30,6 +30,11 @@ const eventSchema = new mongoose.Schema(
       trim: true
     },
 
+    image: {
+      type: String,
+      required: true
+    },
+
     creator: {
       type: mongoose.Types.ObjectId,
       ref: 'users',

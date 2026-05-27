@@ -1,17 +1,25 @@
 export const Navbar = (token) => {
+  const user = JSON.parse(localStorage.getItem('user'))
+
   return `
     <header class="navbar">
-      <h1>MeetMoto</h1>
+      <h1>
+        MeetMoto
+      </h1>
 
-      <nav>
-        <a href="#">Eventos</a>
-
+      <nav class="navbar-right">
         ${
           token
             ? `
-              <button id="logout-btn">
-                Logout
-              </button>
+              <div class="navbar-user">
+                <span>
+                  @${user?.name || 'Usuario'}
+                </span>
+
+                <button id="logout-btn">
+                  Logout
+                </button>
+              </div>
             `
             : `
               <span class="auth-text">

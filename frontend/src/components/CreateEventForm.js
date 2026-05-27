@@ -3,6 +3,8 @@ import { createEvent } from '../services/api'
 import { renderEvents } from './EventsList'
 
 export const CreateEventForm = () => {
+  const today = new Date().toISOString().split('T')[0]
+
   return `
     <section class="create-event-section">
       <h2>
@@ -20,6 +22,13 @@ export const CreateEventForm = () => {
         <input
           type="date"
           name="date"
+          min="${today}"
+          required
+        >
+
+        <input
+          type="time"
+          name="time"
           required
         >
 
@@ -35,6 +44,11 @@ export const CreateEventForm = () => {
           placeholder="Descripción"
           required
         ></textarea>
+
+        <div
+          id="event-form-error"
+          class="form-errors"
+        ></div>
 
         <button>
           Crear evento
@@ -52,11 +66,33 @@ export const createEventListeners = () => {
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
 
+    const errorContainer = document.querySelector('#event-form-error')
+
+    errorContainer.innerHTML = ''
+
     const formData = new FormData(form)
+
+    const selectedDate = formData.get('date')
+    const selectedTime = formData.get('time')
+
+    const eventDate = new Date(`${selectedDate}T${selectedTime}`)
+
+    const now = new Date()
+
+    if (eventDate <= now) {
+      errorContainer.innerHTML = `
+        <p>
+          El evento debe ser en una fecha futura.
+        </p>
+      `
+
+      return
+    }
 
     const eventData = {
       title: formData.get('title'),
-      date: formData.get('date'),
+      date: selectedDate,
+      time: selectedTime,
       location: formData.get('location'),
       description: formData.get('description')
     }

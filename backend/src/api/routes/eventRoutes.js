@@ -16,7 +16,7 @@ const eventRoutes = express.Router()
 eventRoutes.get('/', getEvents)
 eventRoutes.get('/:id', getEventById)
 eventRoutes.post('/', auth, createEvent)
-eventRoutes.put('/join', joinEvent)
+eventRoutes.put('/join', auth, joinEvent)
 eventRoutes.put('/:id', auth, updateEvent)
 eventRoutes.delete('/:id', auth, deleteEvent)
 

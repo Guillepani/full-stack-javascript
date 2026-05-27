@@ -1,11 +1,14 @@
 import { Navbar } from '../components/Navbar'
+
 import { EventsList } from '../components/EventsList'
+
 import {
   CreateEventForm,
   createEventListeners
 } from '../components/CreateEventForm'
 
 import { renderEvents } from '../components/EventsList'
+
 import { logoutListener } from '../components/LogoutButton'
 
 export const AppView = (token) => {
@@ -35,6 +38,13 @@ export const AppView = (token) => {
         </aside>
 
         <section class="events-panel">
+          <div
+            id="events-loader"
+            class="events-loader"
+          >
+            Cargando eventos...
+          </div>
+
           ${EventsList()}
         </section>
       </section>
@@ -42,8 +52,16 @@ export const AppView = (token) => {
   `
 }
 
-export const appViewListeners = () => {
+export const appViewListeners = async () => {
   createEventListeners()
-  renderEvents()
+
+  await renderEvents()
+
+  const loader = document.querySelector('#events-loader')
+
+  if (loader) {
+    loader.remove()
+  }
+
   logoutListener()
 }

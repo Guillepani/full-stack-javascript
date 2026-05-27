@@ -13,6 +13,11 @@ const eventSchema = new mongoose.Schema(
       required: true
     },
 
+    time: {
+      type: String,
+      required: true
+    },
+
     location: {
       type: String,
       required: true,

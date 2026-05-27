@@ -1,18 +1,26 @@
 require('dotenv').config()
 
+const express = require('express')
 const cors = require('cors')
+
 const connectDB = require('./config/db')
+
 const userRoutes = require('./api/routes/userRoutes')
 const eventRoutes = require('./api/routes/eventRoutes')
-const express = require('express')
+
 connectDB()
 
 const app = express()
+
 app.use(
   cors({
-    origin: '*'
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
   })
 )
+
 app.use(express.json())
 
 app.get('/', (req, res) => {

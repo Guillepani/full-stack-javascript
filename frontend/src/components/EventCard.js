@@ -1,7 +1,7 @@
 const user = JSON.parse(localStorage.getItem('user'))
 
 export const EventCard = (event) => {
-  const isCreator = user?._id === event.creator
+  const isCreator = user?._id === event.creator._id
 
   const isAttending = event.attendees.some(
     (attendee) => attendee._id === user?._id
@@ -11,10 +11,12 @@ export const EventCard = (event) => {
     <article class="event-card">
       <div class="event-card-top">
         <div>
-          <h3>${event.title}</h3>
+          <h3>
+            ${event.title}
+          </h3>
 
           <span class="event-location">
-            ${event.location}
+            📍 ${event.location}
           </span>
         </div>
 
@@ -29,6 +31,10 @@ export const EventCard = (event) => {
         }
       </div>
 
+      <div class="event-author">
+        Creado por @${event.creator?.name || 'Usuario'}
+      </div>
+
       <p class="event-description">
         ${event.description}
       </p>
@@ -36,6 +42,10 @@ export const EventCard = (event) => {
       <div class="event-meta">
         <small>
           📅 ${new Date(event.date).toLocaleDateString()}
+        </small>
+
+        <small>
+          🕒 ${event.time}
         </small>
 
         <small>

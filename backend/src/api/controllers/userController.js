@@ -10,7 +10,9 @@ const register = async (req, res) => {
     const userExists = await User.findOne({ email })
 
     if (userExists) {
-      return res.status(400).json('El usuario ya existe')
+      return res.status(400).json({
+        message: 'El usuario ya existe'
+      })
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -23,16 +25,29 @@ const register = async (req, res) => {
 
     const savedUser = await newUser.save()
 
+    const token = jwt.sign(
+      {
+        id: savedUser._id
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '7d'
+      }
+    )
+
     const userWithoutPassword = savedUser.toObject()
 
     delete userWithoutPassword.password
 
     return res.status(201).json({
       message: 'Usuario registrado correctamente',
+      token,
       user: userWithoutPassword
     })
   } catch (error) {
-    return res.status(500).json('Error registrando usuario')
+    return res.status(500).json({
+      message: 'Error registrando usuario'
+    })
   }
 }
 

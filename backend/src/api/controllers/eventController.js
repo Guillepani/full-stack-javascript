@@ -8,14 +8,36 @@ const getEvents = async (req, res) => {
 
     return res.status(200).json(events)
   } catch (error) {
-    return res.status(500).json('Error obteniendo eventos')
+    return res.status(500).json({
+      message: 'Error obteniendo eventos'
+    })
   }
 }
 
 const createEvent = async (req, res) => {
   try {
+    const { title, date, time, location, description } = req.body
+
+    if (!title || !date || !time || !location || !description) {
+      return res.status(400).json({
+        message: 'Todos los campos son obligatorios'
+      })
+    }
+
+    const eventDate = new Date(`${date}T${time}`)
+
+    if (eventDate <= new Date()) {
+      return res.status(400).json({
+        message: 'El evento debe ser futuro'
+      })
+    }
+
     const newEvent = new Event({
-      ...req.body,
+      title,
+      date,
+      time,
+      location,
+      description,
       creator: req.user.id
     })
 
@@ -26,7 +48,9 @@ const createEvent = async (req, res) => {
       event: savedEvent
     })
   } catch (error) {
-    return res.status(500).json('Error creando evento')
+    return res.status(500).json({
+      message: 'Error creando evento'
+    })
   }
 }
 
@@ -35,6 +59,12 @@ const joinEvent = async (req, res) => {
     const { eventId, userId } = req.body
 
     const event = await Event.findById(eventId)
+
+    if (!event) {
+      return res.status(404).json({
+        message: 'Evento no encontrado'
+      })
+    }
 
     const alreadyJoined = event.attendees.includes(userId)
 
@@ -48,7 +78,9 @@ const joinEvent = async (req, res) => {
       {
         new: true
       }
-    ).populate('attendees', '-password')
+    )
+      .populate('attendees', '-password')
+      .populate('creator', 'name email')
 
     return res.status(200).json({
       message: alreadyJoined
@@ -57,7 +89,9 @@ const joinEvent = async (req, res) => {
       event: updatedEvent
     })
   } catch (error) {
-    return res.status(500).json('Error al unirse al evento')
+    return res.status(500).json({
+      message: 'Error al unirse al evento'
+    })
   }
 }
 
@@ -69,9 +103,17 @@ const getEventById = async (req, res) => {
       .populate('attendees', '-password')
       .populate('creator', 'name email')
 
+    if (!event) {
+      return res.status(404).json({
+        message: 'Evento no encontrado'
+      })
+    }
+
     return res.status(200).json(event)
   } catch (error) {
-    return res.status(500).json('Error obteniendo evento')
+    return res.status(500).json({
+      message: 'Error obteniendo evento'
+    })
   }
 }
 
@@ -82,13 +124,15 @@ const updateEvent = async (req, res) => {
     const event = await Event.findById(id)
 
     if (!event) {
-      return res.status(404).json('Evento no encontrado')
+      return res.status(404).json({
+        message: 'Evento no encontrado'
+      })
     }
 
     if (event.creator.toString() !== req.user.id) {
-      return res
-        .status(403)
-        .json('No puedes editar este evento')
+      return res.status(403).json({
+        message: 'No puedes editar este evento'
+      })
     }
 
     const updatedEvent = await Event.findByIdAndUpdate(id, req.body, {
@@ -100,7 +144,9 @@ const updateEvent = async (req, res) => {
       event: updatedEvent
     })
   } catch (error) {
-    return res.status(500).json('Error actualizando evento')
+    return res.status(500).json({
+      message: 'Error actualizando evento'
+    })
   }
 }
 
@@ -111,20 +157,26 @@ const deleteEvent = async (req, res) => {
     const event = await Event.findById(id)
 
     if (!event) {
-      return res.status(404).json('Evento no encontrado')
+      return res.status(404).json({
+        message: 'Evento no encontrado'
+      })
     }
 
     if (event.creator.toString() !== req.user.id) {
-      return res
-        .status(403)
-        .json('No puedes eliminar este evento')
+      return res.status(403).json({
+        message: 'No puedes eliminar este evento'
+      })
     }
 
     await Event.findByIdAndDelete(id)
 
-    return res.status(200).json('Evento eliminado correctamente')
+    return res.status(200).json({
+      message: 'Evento eliminado correctamente'
+    })
   } catch (error) {
-    return res.status(500).json('Error eliminando evento')
+    return res.status(500).json({
+      message: 'Error eliminando evento'
+    })
   }
 }
 

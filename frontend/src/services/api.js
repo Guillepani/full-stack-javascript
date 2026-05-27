@@ -85,3 +85,9 @@ export const createEvent = async (eventData) => {
 
   return response.json()
 }
+
+export const getEventById = async (eventId) => {
+  const response = await fetch(`${API_URL}/events/${eventId}`)
+
+  return response.json()
+}

@@ -11,6 +11,10 @@ import { renderEvents } from '../components/EventsList'
 
 import { logoutListener } from '../components/LogoutButton'
 
+import { getEvents } from '../services/api'
+
+import { ProfileView } from './ProfileView'
+
 export const AppView = (token) => {
   return `
     ${Navbar(token)}
@@ -32,7 +36,10 @@ export const AppView = (token) => {
         </div>
       </section>
 
-      <section class="app-layout">
+      <section
+        id="main-content"
+        class="app-layout"
+      >
         <aside class="create-event-panel">
           ${CreateEventForm()}
         </aside>
@@ -64,4 +71,38 @@ export const appViewListeners = async () => {
   }
 
   logoutListener()
+
+  const homeButton = document.querySelector('#home-view-btn')
+
+  const profileButton = document.querySelector('#profile-view-btn')
+
+  const mainContent = document.querySelector('#main-content')
+
+  const token = localStorage.getItem('token')
+
+  homeButton.addEventListener('click', () => {
+    mainContent.innerHTML = `
+      <aside class="create-event-panel">
+        ${CreateEventForm()}
+      </aside>
+
+      <section class="events-panel">
+        ${EventsList()}
+      </section>
+    `
+
+    createEventListeners()
+
+    renderEvents()
+  })
+
+  profileButton.addEventListener('click', async () => {
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    const events = await getEvents()
+
+    mainContent.innerHTML = `
+        ${ProfileView(user, events)}
+      `
+  })
 }

@@ -11,6 +11,20 @@ export const Navbar = (token) => {
         ${
           token
             ? `
+              <button
+                id="home-view-btn"
+                class="nav-btn"
+              >
+                Eventos
+              </button>
+
+              <button
+                id="profile-view-btn"
+                class="nav-btn"
+              >
+                Mi perfil
+              </button>
+
               <div class="navbar-user">
                 <span>
                   @${user?.name || 'Usuario'}

@@ -121,6 +121,54 @@
   gap: 12px;
 }
 
+.delete-modal {
+  position: fixed;
+  inset: 0;
+
+  background-color: rgba(0, 0, 0, 0.7);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+
+  padding: 20px;
+}
+
+.delete-modal-content {
+  width: 100%;
+  max-width: 420px;
+
+  background-color: #111827;
+
+  border: 1px solid #374151;
+
+  border-radius: 20px;
+
+  padding: 30px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  text-align: center;
+}
+
+.delete-modal-content p {
+  color: #cbd5e1;
+}
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+#confirm-delete-btn {
+  background-color: #dc2626;
+}
+
 .hidden {
   display: none;
 }

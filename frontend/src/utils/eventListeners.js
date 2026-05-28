@@ -1,6 +1,22 @@
-import { joinEvent, deleteEvent, updateEvent } from '../services/api'
+import {
+  joinEvent,
+  deleteEvent,
+  updateEvent,
+  getEventById
+} from '../services/api'
 
 import { renderEvents } from '../components/events/EventsList'
+
+import { EventDetailView } from '../views/EventDetailView'
+
+import { EventsList } from '../components/events/EventsList'
+
+import {
+  CreateEventForm,
+  createEventListeners
+} from '../components/forms/CreateEventForm'
+
+import { showToast } from '../components/ui/Toast'
 
 const user = JSON.parse(localStorage.getItem('user'))
 
@@ -9,27 +25,95 @@ export const addEventCardListeners = () => {
 
   joinButtons.forEach((button) => {
     button.addEventListener('click', async () => {
-      const eventId = button.dataset.eventId
+      try {
+        const eventId = button.dataset.eventId
 
-      await joinEvent(eventId, user._id)
+        const response = await joinEvent(eventId, user._id)
 
-      renderEvents()
+        showToast(response.message)
+
+        await renderEvents()
+      } catch (error) {
+        showToast('Error al actualizar asistencia', 'error')
+      }
     })
   })
+
+  const deleteModal = document.querySelector('#delete-modal')
+
+  const confirmDeleteButton = document.querySelector('#confirm-delete-btn')
+
+  const cancelDeleteButton = document.querySelector('#cancel-delete-btn')
+
+  let eventToDelete = null
 
   const deleteButtons = document.querySelectorAll('.delete-btn')
 
   deleteButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      eventToDelete = button.dataset.eventId
+
+      deleteModal.classList.remove('hidden')
+    })
+  })
+
+  cancelDeleteButton.addEventListener('click', () => {
+    deleteModal.classList.add('hidden')
+
+    eventToDelete = null
+  })
+
+  confirmDeleteButton.addEventListener('click', async () => {
+    try {
+      if (!eventToDelete) return
+
+      await deleteEvent(eventToDelete)
+
+      showToast('Evento eliminado correctamente')
+
+      deleteModal.classList.add('hidden')
+
+      eventToDelete = null
+
+      await renderEvents()
+    } catch (error) {
+      showToast('Error eliminando evento', 'error')
+    }
+  })
+
+  const detailsButtons = document.querySelectorAll('.details-btn')
+
+  detailsButtons.forEach((button) => {
     button.addEventListener('click', async () => {
-      const confirmed = confirm('¿Seguro que quieres eliminar este evento?')
+      try {
+        const eventId = button.dataset.eventId
 
-      if (!confirmed) return
+        const event = await getEventById(eventId)
 
-      const eventId = button.dataset.eventId
+        const mainContent = document.querySelector('#main-content')
 
-      await deleteEvent(eventId)
+        mainContent.innerHTML = EventDetailView(event)
 
-      renderEvents()
+        const backButton = document.querySelector('#back-to-events')
+
+        backButton.addEventListener('click', async () => {
+          mainContent.innerHTML = `
+                <aside class="create-event-panel">
+                  ${CreateEventForm()}
+                </aside>
+
+                <section class="events-panel">
+                  ${EventsList()}
+                </section>
+              `
+
+          createEventListeners()
+
+          await renderEvents()
+        })
+      } catch (error) {
+        showToast('Error cargando el evento', 'error')
+      }
     })
   })
 
@@ -41,11 +125,9 @@ export const addEventCardListeners = () => {
 
   const editButtons = document.querySelectorAll('.edit-btn')
 
-  let currentEventId = null
-
   editButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      currentEventId = button.dataset.eventId
+      form.dataset.eventId = button.dataset.eventId
 
       document.querySelector('#edit-title').value = button.dataset.title
 
@@ -69,20 +151,26 @@ export const addEventCardListeners = () => {
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
 
-    await updateEvent(currentEventId, {
-      title: document.querySelector('#edit-title').value,
+    try {
+      await updateEvent(form.dataset.eventId, {
+        title: document.querySelector('#edit-title').value,
 
-      date: document.querySelector('#edit-date').value,
+        date: document.querySelector('#edit-date').value,
 
-      time: document.querySelector('#edit-time').value,
+        time: document.querySelector('#edit-time').value,
 
-      location: document.querySelector('#edit-location').value,
+        location: document.querySelector('#edit-location').value,
 
-      description: document.querySelector('#edit-description').value
-    })
+        description: document.querySelector('#edit-description').value
+      })
 
-    modal.classList.add('hidden')
+      showToast('Evento actualizado correctamente')
 
-    renderEvents()
+      modal.classList.add('hidden')
+
+      await renderEvents()
+    } catch (error) {
+      showToast('Error actualizando evento', 'error')
+    }
   })
 }

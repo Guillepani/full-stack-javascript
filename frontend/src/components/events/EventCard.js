@@ -61,6 +61,13 @@ export const EventCard = (event) => {
 
       <div class="event-actions">
         <button
+          class="details-btn"
+          data-event-id="${event._id}"
+        >
+          Ver detalle
+        </button>
+
+        <button
           class="join-btn"
           data-event-id="${event._id}"
         >

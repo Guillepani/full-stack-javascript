@@ -2,6 +2,8 @@ import { createEvent } from '../../services/api'
 
 import { renderEvents } from '../events/EventsList'
 
+import { showToast } from '../ui/Toast'
+
 export const CreateEventForm = () => {
   const today = new Date().toISOString().split('T')[0]
 
@@ -57,7 +59,7 @@ export const CreateEventForm = () => {
           class="form-errors"
         ></div>
 
-        <button>
+        <button id="create-event-btn">
           Crear evento
         </button>
       </form>
@@ -75,6 +77,8 @@ export const createEventListeners = () => {
 
     const errorContainer = document.querySelector('#event-form-error')
 
+    const submitButton = document.querySelector('#create-event-btn')
+
     errorContainer.innerHTML = ''
 
     const formData = new FormData(form)
@@ -89,22 +93,32 @@ export const createEventListeners = () => {
 
     if (eventDate <= now) {
       errorContainer.innerHTML = `
-        <p>
-          El evento debe ser en una fecha futura.
-        </p>
-      `
+          <p>
+            El evento debe ser en una fecha futura.
+          </p>
+        `
 
       return
     }
 
-    const response = await createEvent(formData)
+    try {
+      submitButton.disabled = true
 
-    if (response.message) {
-      console.log(response.message)
+      submitButton.textContent = 'Creando evento...'
+
+      const response = await createEvent(formData)
+
+      showToast(response.message)
+
+      await renderEvents()
+
+      form.reset()
+    } catch (error) {
+      showToast('Error creando evento', 'error')
+    } finally {
+      submitButton.disabled = false
+
+      submitButton.textContent = 'Crear evento'
     }
-
-    renderEvents()
-
-    form.reset()
   })
 }

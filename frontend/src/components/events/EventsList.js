@@ -4,6 +4,8 @@ import { addEventCardListeners } from '../../utils/eventListeners'
 
 import { EditEventModal } from './EditEventModal'
 
+import { DeleteEventModal } from './DeleteEventModal'
+
 import { EventCard } from '../events/EventCard'
 
 export const EventsList = () => {
@@ -40,6 +42,8 @@ export const EventsList = () => {
       </div>
 
       ${EditEventModal()}
+
+      ${DeleteEventModal()}
     </section>
   `
 }

@@ -8,16 +8,24 @@ export const EventDetailView = (event) => {
         ← Volver
       </button>
 
-      <div class="event-detail-card">
-        <img
-          class="event-detail-image"
-          src="${event.image}"
-          alt="${event.title}"
-        >
+      <article class="event-detail-card">
+        <div class="event-detail-image-wrapper">
+          <img
+            class="event-detail-image"
+            src="${event.image}"
+            alt="${event.title}"
+          >
+
+          <div class="event-detail-overlay"></div>
+        </div>
 
         <div class="event-detail-content">
           <div class="event-detail-top">
             <div>
+              <span class="event-detail-tag">
+                MeetMoto Event
+              </span>
+
               <h1>
                 ${event.title}
               </h1>
@@ -46,14 +54,26 @@ export const EventDetailView = (event) => {
             </span>
           </div>
 
-          <p class="event-detail-description">
-            ${event.description}
-          </p>
+          <div class="event-detail-description-box">
+            <h3>
+              Descripción
+            </h3>
+
+            <p class="event-detail-description">
+              ${event.description}
+            </p>
+          </div>
 
           <div class="event-detail-attendees">
-            <h3>
-              Asistentes
-            </h3>
+            <div class="event-detail-attendees-top">
+              <h3>
+                Riders apuntados
+              </h3>
+
+              <span>
+                ${event.attendees.length}
+              </span>
+            </div>
 
             <div class="attendees-list">
               ${
@@ -68,7 +88,7 @@ export const EventDetailView = (event) => {
                       )
                       .join('')
                   : `
-                    <p>
+                    <p class="no-attendees">
                       Todavía no hay asistentes.
                     </p>
                   `
@@ -76,7 +96,7 @@ export const EventDetailView = (event) => {
             </div>
           </div>
         </div>
-      </div>
+      </article>
     </section>
   `
 }

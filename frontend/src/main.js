@@ -4,6 +4,7 @@ import './styles/forms.css'
 import './styles/events.css'
 import './styles/auth-view.css'
 import './styles/app-view.css'
+import './styles/event-detail.css'
 
 import { AuthView, authViewListeners } from './views/AuthView'
 import { AppView, appViewListeners } from './views/AppView'

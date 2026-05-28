@@ -1,9 +1,6 @@
 import { Navbar } from '../components/layout/Navbar'
 
-import {
-  EventsList,
-  renderEvents
-} from '../components/events/EventsList'
+import { EventsList, renderEvents } from '../components/events/EventsList'
 
 import {
   CreateEventForm,
@@ -37,14 +34,36 @@ export const AppView = (token) => {
         </div>
       </section>
 
+      <button
+        id="open-create-modal"
+        class="floating-create-btn"
+      >
+        Crear evento
+      </button>
+
+      <div
+        id="create-event-modal"
+        class="create-event-modal hidden"
+      >
+        <div class="create-event-modal-content">
+          <div class="create-event-modal-top">
+            <h2>
+              Crear evento
+            </h2>
+
+            <button id="close-create-modal">
+              ✕
+            </button>
+          </div>
+
+          ${CreateEventForm()}
+        </div>
+      </div>
+
       <section
         id="main-content"
         class="app-layout"
       >
-        <aside class="create-event-panel">
-          ${CreateEventForm()}
-        </aside>
-
         <section class="events-panel">
           <div
             id="events-loader"
@@ -65,9 +84,7 @@ export const appViewListeners = async () => {
 
   await renderEvents()
 
-  const loader = document.querySelector(
-    '#events-loader'
-  )
+  const loader = document.querySelector('#events-loader')
 
   if (loader) {
     loader.remove()
@@ -75,46 +92,43 @@ export const appViewListeners = async () => {
 
   logoutListener()
 
-  const homeButton = document.querySelector(
-    '#home-view-btn'
-  )
+  const homeButton = document.querySelector('#home-view-btn')
 
-  const profileButton = document.querySelector(
-    '#profile-view-btn'
-  )
+  const profileButton = document.querySelector('#profile-view-btn')
 
-  const mainContent = document.querySelector(
-    '#main-content'
-  )
+  const mainContent = document.querySelector('#main-content')
+
+  const openCreateModal = document.querySelector('#open-create-modal')
+
+  const closeCreateModal = document.querySelector('#close-create-modal')
+
+  const createEventModal = document.querySelector('#create-event-modal')
+
+  openCreateModal?.addEventListener('click', () => {
+    createEventModal.classList.remove('hidden')
+  })
+
+  closeCreateModal?.addEventListener('click', () => {
+    createEventModal.classList.add('hidden')
+  })
 
   homeButton?.addEventListener('click', async () => {
     mainContent.innerHTML = `
-      <aside class="create-event-panel">
-        ${CreateEventForm()}
-      </aside>
-
-      <section class="events-panel">
-        ${EventsList()}
-      </section>
-    `
-
-    createEventListeners()
+        <section class="events-panel">
+          ${EventsList()}
+        </section>
+      `
 
     await renderEvents()
   })
 
-  profileButton?.addEventListener(
-    'click',
-    async () => {
-      const user = JSON.parse(
-        localStorage.getItem('user')
-      )
+  profileButton?.addEventListener('click', async () => {
+    const user = JSON.parse(localStorage.getItem('user'))
 
-      const events = await getEvents()
+    const events = await getEvents()
 
-      mainContent.innerHTML = `
+    mainContent.innerHTML = `
         ${ProfileView(user, events)}
       `
-    }
-  )
+  })
 }

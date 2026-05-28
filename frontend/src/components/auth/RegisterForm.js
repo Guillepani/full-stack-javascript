@@ -1,4 +1,4 @@
-import { registerUser } from '../services/api'
+import { registerUser } from '../../services/api'
 
 const validateRegister = ({ name, email, password }) => {
   const errors = []

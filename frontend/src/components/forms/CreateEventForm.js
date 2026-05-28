@@ -1,6 +1,6 @@
-import { createEvent } from '../services/api'
+import { createEvent } from '../../services/api'
 
-import { renderEvents } from './EventsList'
+import { renderEvents } from '../events/EventsList'
 
 export const CreateEventForm = () => {
   const today = new Date().toISOString().split('T')[0]

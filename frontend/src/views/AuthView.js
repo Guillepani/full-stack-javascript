@@ -1,5 +1,10 @@
-import { RegisterForm, registerFormListeners } from '../components/RegisterForm'
-import { LoginForm, loginFormListeners } from '../components/LoginForm'
+import { LoginForm } from '../components/auth/LoginForm'
+
+import { loginFormListeners } from '../components/auth/LoginForm'
+
+import { RegisterForm } from '../components/auth/RegisterForm'
+
+import { registerFormListeners } from '../components/auth/RegisterForm'
 
 export const AuthView = () => {
   return `
@@ -95,11 +100,13 @@ export const authViewListeners = () => {
   document.addEventListener('click', (event) => {
     if (event.target.id === 'go-register') {
       authForms.innerHTML = renderRegisterView()
+
       registerFormListeners()
     }
 
     if (event.target.id === 'go-login') {
       authForms.innerHTML = renderLoginView()
+
       loginFormListeners()
     }
   })

@@ -1,15 +1,16 @@
-import { Navbar } from '../components/Navbar'
+import { Navbar } from '../components/layout/Navbar'
 
-import { EventsList } from '../components/EventsList'
+import {
+  EventsList,
+  renderEvents
+} from '../components/events/EventsList'
 
 import {
   CreateEventForm,
   createEventListeners
-} from '../components/CreateEventForm'
+} from '../components/forms/CreateEventForm'
 
-import { renderEvents } from '../components/EventsList'
-
-import { logoutListener } from '../components/LogoutButton'
+import { logoutListener } from '../components/layout/LogoutButton'
 
 import { getEvents } from '../services/api'
 
@@ -64,7 +65,9 @@ export const appViewListeners = async () => {
 
   await renderEvents()
 
-  const loader = document.querySelector('#events-loader')
+  const loader = document.querySelector(
+    '#events-loader'
+  )
 
   if (loader) {
     loader.remove()
@@ -72,15 +75,19 @@ export const appViewListeners = async () => {
 
   logoutListener()
 
-  const homeButton = document.querySelector('#home-view-btn')
+  const homeButton = document.querySelector(
+    '#home-view-btn'
+  )
 
-  const profileButton = document.querySelector('#profile-view-btn')
+  const profileButton = document.querySelector(
+    '#profile-view-btn'
+  )
 
-  const mainContent = document.querySelector('#main-content')
+  const mainContent = document.querySelector(
+    '#main-content'
+  )
 
-  const token = localStorage.getItem('token')
-
-  homeButton.addEventListener('click', () => {
+  homeButton?.addEventListener('click', async () => {
     mainContent.innerHTML = `
       <aside class="create-event-panel">
         ${CreateEventForm()}
@@ -93,16 +100,21 @@ export const appViewListeners = async () => {
 
     createEventListeners()
 
-    renderEvents()
+    await renderEvents()
   })
 
-  profileButton.addEventListener('click', async () => {
-    const user = JSON.parse(localStorage.getItem('user'))
+  profileButton?.addEventListener(
+    'click',
+    async () => {
+      const user = JSON.parse(
+        localStorage.getItem('user')
+      )
 
-    const events = await getEvents()
+      const events = await getEvents()
 
-    mainContent.innerHTML = `
+      mainContent.innerHTML = `
         ${ProfileView(user, events)}
       `
-  })
+    }
+  )
 }

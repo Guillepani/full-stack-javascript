@@ -2,6 +2,8 @@ import { Navbar } from '../components/layout/Navbar'
 
 import { EventsList, renderEvents } from '../components/events/EventsList'
 
+import { ImagePreviewModal } from '../components/events/ImagePreviewModal'
+
 import {
   CreateEventForm,
   createEventListeners
@@ -75,6 +77,8 @@ export const AppView = (token) => {
           ${EventsList()}
         </section>
       </section>
+
+      ${ImagePreviewModal()}
     </main>
   `
 }

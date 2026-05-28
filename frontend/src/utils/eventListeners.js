@@ -57,13 +57,13 @@ export const addEventCardListeners = () => {
     })
   })
 
-  cancelDeleteButton.addEventListener('click', () => {
+  cancelDeleteButton?.addEventListener('click', () => {
     deleteModal.classList.add('hidden')
 
     eventToDelete = null
   })
 
-  confirmDeleteButton.addEventListener('click', async () => {
+  confirmDeleteButton?.addEventListener('click', async () => {
     try {
       if (!eventToDelete) return
 
@@ -94,20 +94,16 @@ export const addEventCardListeners = () => {
 
         mainContent.innerHTML = EventDetailView(event)
 
+        activateImagePreview()
+
         const backButton = document.querySelector('#back-to-events')
 
-        backButton.addEventListener('click', async () => {
+        backButton?.addEventListener('click', async () => {
           mainContent.innerHTML = `
-                <aside class="create-event-panel">
-                  ${CreateEventForm()}
-                </aside>
-
                 <section class="events-panel">
                   ${EventsList()}
                 </section>
               `
-
-          createEventListeners()
 
           await renderEvents()
         })
@@ -116,6 +112,8 @@ export const addEventCardListeners = () => {
       }
     })
   })
+
+  activateImagePreview()
 
   const modal = document.querySelector('#edit-modal')
 
@@ -144,11 +142,11 @@ export const addEventCardListeners = () => {
     })
   })
 
-  closeButton.addEventListener('click', () => {
+  closeButton?.addEventListener('click', () => {
     modal.classList.add('hidden')
   })
 
-  form.addEventListener('submit', async (event) => {
+  form?.addEventListener('submit', async (event) => {
     event.preventDefault()
 
     try {
@@ -171,6 +169,40 @@ export const addEventCardListeners = () => {
       await renderEvents()
     } catch (error) {
       showToast('Error actualizando evento', 'error')
+    }
+  })
+}
+
+const activateImagePreview = () => {
+  const previewModal = document.querySelector('#image-preview-modal')
+
+  const previewImage = document.querySelector('#image-preview')
+
+  const closePreviewButton = document.querySelector('#close-image-preview')
+
+  const previewImages = document.querySelectorAll(
+    '.event-image, .event-detail-image'
+  )
+
+  previewImages.forEach((image) => {
+    image.addEventListener('click', () => {
+      previewImage.src = image.src
+
+      previewModal.classList.remove('hidden')
+    })
+  })
+
+  closePreviewButton?.addEventListener('click', () => {
+    previewModal.classList.add('hidden')
+
+    previewImage.src = ''
+  })
+
+  previewModal?.addEventListener('click', (event) => {
+    if (event.target === previewModal) {
+      previewModal.classList.add('hidden')
+
+      previewImage.src = ''
     }
   })
 }

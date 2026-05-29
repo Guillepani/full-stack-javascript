@@ -36,12 +36,14 @@ export const AppView = (token) => {
         </div>
       </section>
 
-      <button
-        id="open-create-modal"
-        class="floating-create-btn"
-      >
-        Crear evento
-      </button>
+       <div class="hero-actions">
+        <button
+          id="open-create-modal"
+          class="create-event-cta"
+       >
+         Crear evento
+        </button>
+       </div>
 
       <div
         id="create-event-modal"
@@ -96,8 +98,6 @@ export const appViewListeners = async () => {
 
   logoutListener()
 
-  const homeButton = document.querySelector('#home-view-btn')
-
   const profileButton = document.querySelector('#profile-view-btn')
 
   const mainContent = document.querySelector('#main-content')
@@ -114,16 +114,6 @@ export const appViewListeners = async () => {
 
   closeCreateModal?.addEventListener('click', () => {
     createEventModal.classList.add('hidden')
-  })
-
-  homeButton?.addEventListener('click', async () => {
-    mainContent.innerHTML = `
-        <section class="events-panel">
-          ${EventsList()}
-        </section>
-      `
-
-    await renderEvents()
   })
 
   profileButton?.addEventListener('click', async () => {

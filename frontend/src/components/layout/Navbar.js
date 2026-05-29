@@ -3,32 +3,25 @@ export const Navbar = (token) => {
 
   return `
     <header class="navbar">
-      <h1>
+      <div class="navbar-logo">
         MeetMoto
-      </h1>
+      </div>
 
       <nav class="navbar-right">
         ${
           token
             ? `
               <button
-                id="home-view-btn"
-                class="nav-btn"
-              >
-                Eventos
-              </button>
-
-              <button
                 id="profile-view-btn"
-                class="nav-btn"
+                class="nav-link"
               >
                 Mi perfil
               </button>
 
               <div class="navbar-user">
-                <span>
-                  @${user?.name || 'Usuario'}
-                </span>
+                <div class="user-pill">
+                  👤 ${user?.name || 'Usuario'}
+                </div>
 
                 <button id="logout-btn">
                   Logout

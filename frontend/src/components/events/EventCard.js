@@ -1,7 +1,7 @@
 const user = JSON.parse(localStorage.getItem('user'))
 
 export const EventCard = (event) => {
-  const isCreator = user?._id === event.creator._id
+  const isCreator = user?._id === event.creator?._id
 
   const isAttending = event.attendees.some(
     (attendee) => attendee._id === user?._id
@@ -9,66 +9,48 @@ export const EventCard = (event) => {
 
   return `
     <article class="event-card">
+      <div class="event-card-header">
+        <div class="event-user">
+          <div class="event-user-avatar">
+            ${event.creator?.name?.charAt(0).toUpperCase() || 'M'}
+          </div>
+
+          <span class="event-user-name">
+            ${event.creator?.name || 'Usuario'}
+          </span>
+        </div>
+      </div>
+
       <div class="event-image-wrapper">
         <img
           class="event-image"
           src="${event.image}"
           alt="${event.title}"
         >
-
-        <div class="event-image-overlay"></div>
-
-        <div class="event-image-content">
-          <div class="event-image-top">
-            <div class="event-user">
-              <div class="event-user-avatar">
-                ${event.creator?.name?.charAt(0).toUpperCase() || 'M'}
-              </div>
-
-              <span>
-                @${event.creator?.name || 'Usuario'}
-              </span>
-            </div>
-
-            ${
-              isCreator
-                ? `
-                  <span class="creator-badge">
-                    Tu evento
-                  </span>
-                `
-                : ''
-            }
-          </div>
-
-          <div class="event-image-bottom">
-            <div class="event-main-info">
-              <h3>
-                ${event.title}
-              </h3>
-
-              <span class="event-location">
-                📍 ${event.location}
-              </span>
-            </div>
-
-            <div class="event-meta">
-              <small>
-                📅 ${new Date(event.date).toLocaleDateString()}
-              </small>
-
-              <small>
-                👥 ${event.attendees.length}
-              </small>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="event-card-body">
-        <p class="event-description">
-          ${event.description}
-        </p>
+        <h3 class="event-title">
+          ${event.title}
+        </h3>
+
+        <div class="event-info">
+          <span>
+            📍 ${event.location}
+          </span>
+
+          <span>
+            📅 ${new Date(event.date).toLocaleDateString()}
+          </span>
+
+          <span>
+            🕒 ${event.time}
+          </span>
+
+          <span>
+            👥 ${event.attendees.length} asistentes
+          </span>
+        </div>
 
         <div class="event-actions">
           <button
@@ -84,10 +66,12 @@ export const EventCard = (event) => {
           >
             ${isAttending ? 'Salir' : 'Apuntarse'}
           </button>
+        </div>
 
-          ${
-            isCreator
-              ? `
+        ${
+          isCreator
+            ? `
+              <div class="event-owner-actions">
                 <button
                   class="edit-btn"
                   data-event-id="${event._id}"
@@ -97,19 +81,19 @@ export const EventCard = (event) => {
                   data-date="${event.date.split('T')[0]}"
                   data-time="${event.time}"
                 >
-                  Editar
+                  Editar evento
                 </button>
 
                 <button
                   class="delete-btn"
                   data-event-id="${event._id}"
                 >
-                  Eliminar
+                  Eliminar evento
                 </button>
-              `
-              : ''
-          }
-        </div>
+              </div>
+            `
+            : ''
+        }
       </div>
     </article>
   `
